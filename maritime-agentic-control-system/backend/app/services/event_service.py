@@ -1,0 +1,1 @@
+#Routes should not contain the business logic, so we use services to handle the business logic. This is a service that handles events.
