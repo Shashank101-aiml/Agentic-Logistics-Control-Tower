@@ -9,10 +9,11 @@ router = APIRouter()
 def get_dashboard_summary():
     event = IngestionAgent().collect_data()
     risk = RiskAgent().calculate_risk(event)
+    risk_score = risk.get("score", 0)
     return {
         "active_vessels": 42,
-        "active_alerts": 3 if risk > 50 else 1,
-        "average_fleet_risk": risk,
+        "active_alerts": 3 if risk_score > 50 else 1,
+        "average_fleet_risk": risk_score,
         "recent_events": [
             {
                 "id": "EVT-1001",

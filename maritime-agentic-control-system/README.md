@@ -21,6 +21,7 @@ A FastAPI backend for maritime event logging, route planning, risk management, a
 - Modular architecture: API routes, services, workflows, dependencies, and schemas
 - Automated tests for core route availability
 
+
 ## Requirements
 
 - Python 3.11+

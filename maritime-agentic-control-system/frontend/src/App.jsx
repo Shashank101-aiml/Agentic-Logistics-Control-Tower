@@ -1,15 +1,40 @@
 import React, { useState } from 'react';
-import Navbar from './components/Navbar';
+import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
+import VesselTracking from './pages/VesselTracking';
+import EventMonitor from './pages/EventMonitor';
+import RiskAnalysis from './pages/RiskAnalysis';
+import RouteRecommendations from './pages/RouteRecommendations';
+import Settings from './pages/Settings';
 import './index.css';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
 
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <Dashboard activeTab="dashboard" />;
+      case 'workflow':
+        return <Dashboard activeTab="workflow" />;
+      case 'tracking':
+        return <VesselTracking />;
+      case 'monitor':
+        return <EventMonitor />;
+      case 'risk':
+        return <RiskAnalysis />;
+      case 'routes':
+        return <RouteRecommendations />;
+      case 'settings':
+        return <Settings />;
+      default:
+        return <Dashboard activeTab="dashboard" />;
+    }
+  };
+
   return (
-    <div className="app-container">
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} systemStatus="OPERATIONAL" />
-      <Dashboard activeTab={activeTab} />
-    </div>
+    <MainLayout activeTab={activeTab} setActiveTab={setActiveTab}>
+      {renderContent()}
+    </MainLayout>
   );
 }

@@ -10,8 +10,9 @@ def get_risk():
 
     event = IngestionAgent().collect_data()
 
-    score = RiskAgent().calculate_risk(event)
+    risk_data = RiskAgent().calculate_risk(event)
 
     return {
-        "risk_score": score
+        "risk_score": risk_data.get("score", 0),
+        "details": risk_data
     }

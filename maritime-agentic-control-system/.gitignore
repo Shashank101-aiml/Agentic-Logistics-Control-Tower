@@ -15,3 +15,6 @@ venv/
 # Python
 *.pyo
 *.pyd
+
+backend/app/props.env
+frontend/dist/
