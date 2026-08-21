@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 from pydantic import BaseSettings, AnyUrl
+=======
+from pydantic_settings import BaseSettings
+from pydantic import AnyUrl
+>>>>>>> 80d16660a52137b15a5dfffa5e213328db0bf64a
 
 
 class Settings(BaseSettings):

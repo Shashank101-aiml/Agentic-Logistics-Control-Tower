@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+<<<<<<< HEAD
 import {
   executeWorkflow,
   getAgentStatus
@@ -6,6 +7,12 @@ import {
 
 /**
  * Custom hook for coordinating the multi-agent workflow
+=======
+import { executeWorkflow, getAgentStatus } from '../services/workflowServices';
+
+/**
+ * Custom hook for coordinating the multi-agent LangGraph pipeline
+>>>>>>> 80d16660a52137b15a5dfffa5e213328db0bf64a
  */
 export const useWorkflow = () => {
   const [agents, setAgents] = useState([]);
@@ -16,7 +23,10 @@ export const useWorkflow = () => {
 
   const loadAgents = useCallback(async () => {
     setLoadingAgents(true);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 80d16660a52137b15a5dfffa5e213328db0bf64a
     try {
       const data = await getAgentStatus();
       setAgents(data);
@@ -29,6 +39,7 @@ export const useWorkflow = () => {
 
   useEffect(() => {
     loadAgents();
+<<<<<<< HEAD
 
     const interval = setInterval(
       loadAgents,
@@ -70,6 +81,23 @@ export const useWorkflow = () => {
 
       throw err;
 
+=======
+    const interval = setInterval(loadAgents, 20000);
+    return () => clearInterval(interval);
+  }, [loadAgents]);
+
+  const runPipeline = async () => {
+    setExecuting(true);
+    setError(null);
+    try {
+      const res = await executeWorkflow();
+      setWorkflowRes(res);
+      await loadAgents();
+      return res;
+    } catch (err) {
+      setError('Multi-agent workflow execution failed.');
+      throw err;
+>>>>>>> 80d16660a52137b15a5dfffa5e213328db0bf64a
     } finally {
       setExecuting(false);
     }
@@ -86,4 +114,8 @@ export const useWorkflow = () => {
   };
 };
 
+<<<<<<< HEAD
 export default useWorkflow;
+=======
+export default useWorkflow;
+>>>>>>> 80d16660a52137b15a5dfffa5e213328db0bf64a
