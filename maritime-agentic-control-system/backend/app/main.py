@@ -8,7 +8,8 @@ from app.api.routes.dashboard import router as dashboard_router
 from app.api.routes.recommendation import router as recommendation_router
 from app.api.routes.agents import router as agents_router
 from app.api.routes.health import router as health_router
-
+from app.api.routes.intelligence import router as intelligence_router
+from app.api.routes.vessels import router as vessels_router
 app = FastAPI(
     title="Maritime Agentic Control System",
     description="Backend API for Maritime Agentic AI Control & Route Planning"
@@ -41,3 +42,5 @@ app.include_router(dashboard_router, prefix="/api")
 app.include_router(recommendation_router, prefix="/api")
 app.include_router(agents_router, prefix="/api")
 app.include_router(health_router, prefix="/api")
+app.include_router(intelligence_router, prefix="/api")
+app.include_router(vessels_router, prefix="/api")

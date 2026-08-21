@@ -19,8 +19,43 @@ export const fetchRisks = async () => {
 };
 
 export const runWorkflow = async () => {
-  const res = await fetch(`${BASE_URL}/run-workflow`);
-  if (!res.ok) throw new Error('Failed to run workflow');
+  const event = {
+    event_type: "weather",
+    severity: "high",
+    description: "Severe weather detected",
+    weather_severity: 0.8,
+    congestion_score: 0.4,
+    incident_score: 0.2,
+    delay_hours: 24
+  };
+
+  const route = {
+    origin: "SGSIN",
+    destination: "NLRTM",
+    status: "planned",
+    distance_nm: 7950,
+    estimated_cost_usd: 2440000,
+    delay_hours: 236
+  };
+
+  const res = await fetch(
+    `${BASE_URL}/intelligence/analyze`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        event,
+        route
+      })
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to run workflow");
+  }
+
   return res.json();
 };
 

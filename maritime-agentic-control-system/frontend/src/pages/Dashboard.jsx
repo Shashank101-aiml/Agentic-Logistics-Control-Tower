@@ -4,8 +4,9 @@ import {
   MapPin, Wind, Navigation, Sparkles, RefreshCw 
 } from 'lucide-react';
 import { 
-  fetchDashboard, fetchAgents, runWorkflow, fetchRecommendations 
+  fetchDashboard, fetchAgents, fetchRecommendations 
 } from '../services/api';
+import { executeWorkflow } from '../services/workflowServices';
 
 export default function Dashboard({ activeTab }) {
   const [stats, setStats] = useState(null);
@@ -39,17 +40,40 @@ export default function Dashboard({ activeTab }) {
   }, []);
 
   const handleRunWorkflow = async () => {
-    setExecuting(true);
-    try {
-      const res = await runWorkflow();
-      setWorkflowRes(res);
-      await loadData();
-    } catch (err) {
-      setError('Workflow execution failed.');
-    } finally {
-      setExecuting(false);
-    }
-  };
+  setExecuting(true);
+  setError(null);
+
+  try {
+    const event = {
+      event_type: 'weather',
+      severity: 'high',
+      description: 'Severe weather detected',
+      weather_severity: 0.8,
+      congestion_score: 0.4,
+      incident_score: 0.2,
+      delay_hours: 24
+    };
+
+    const route = {
+      origin: 'SGSIN',
+      destination: 'NLRTM',
+      status: 'planned',
+      distance_nm: 7950,
+      estimated_cost_usd: 2440000,
+      delay_hours: 236
+    };
+
+    const res = await executeWorkflow(event, route);
+
+    setWorkflowRes(res);
+  } catch (err) {
+    console.error('Workflow execution error:', err);
+    setError('Workflow execution failed.');
+  } finally {
+    setExecuting(false);
+  }
+};
+const result = workflowRes?.result || workflowRes;
 
   if (error) {
     return (
@@ -210,40 +234,122 @@ export default function Dashboard({ activeTab }) {
           </div>
 
           {workflowRes ? (
-            <div className="workflow-box">
-              <div className="workflow-header">
-                <CheckCircle2 size={24} color="var(--accent-emerald)" />
-                Collaborative Pipeline Execution Completed Successfully
-              </div>
-              <p style={{ fontSize: '1.1rem', color: '#ffffff', margin: '12px 0', lineHeight: 1.5 }}>
-                <strong style={{ color: 'var(--accent-cyan)' }}>AI Reasoning Summary: </strong>
-                {workflowRes.explanation}
-              </p>
+  <div className="workflow-box">
+    <div className="workflow-header">
+      <CheckCircle2
+        size={24}
+        color="var(--accent-emerald)"
+      />
+      Collaborative Pipeline Execution Completed Successfully
+    </div>
 
-              <div className="workflow-data">
-                <div className="data-chunk">
-                  <div className="chunk-label">Ingested Telemetry Event</div>
-                  <div className="chunk-val">{workflowRes.event?.event_type} at {workflowRes.event?.location} ({workflowRes.event?.severity})</div>
-                </div>
+    <p
+      style={{
+        fontSize: '1.1rem',
+        color: '#ffffff',
+        margin: '12px 0',
+        lineHeight: 1.5
+      }}
+    >
+      <strong
+        style={{
+          color: 'var(--accent-cyan)'
+        }}
+      >
+        AI Reasoning Summary:
+      </strong>{' '}
+      {result?.explanation}
+    </p>
 
-                <div className="data-chunk">
-                  <div className="chunk-label">Assessed Hazard Score</div>
-                  <div className={`chunk-val ${workflowRes.risk_score > 50 ? 'risk-high' : 'risk-low'}`}>
-                    {workflowRes.risk_score} / 100 ({workflowRes.risk_score > 50 ? 'CRITICAL RISK' : 'NORMAL RISK'})
-                  </div>
-                </div>
+    <div className="workflow-data">
 
-                <div className="data-chunk">
-                  <div className="chunk-label">Suggested Corridor</div>
-                  <div className="chunk-val" style={{ color: 'var(--accent-cyan)' }}>{workflowRes.route?.route}</div>
-                </div>
+      <div className="data-chunk">
+        <div className="chunk-label">
+          Ingested Telemetry Event
+        </div>
 
-                <div className="data-chunk">
-                  <div className="chunk-label">Routing Justification</div>
-                  <div className="chunk-val">{workflowRes.route?.reason}</div>
-                </div>
-              </div>
-            </div>
+        <div className="chunk-val">
+          {result?.event?.event_type}
+          {' — '}
+          {result?.event?.description}
+          {' '}
+          (
+          {result?.event?.severity}
+          )
+        </div>
+      </div>
+
+      <div className="data-chunk">
+        <div className="chunk-label">
+          Assessed Hazard Score
+        </div>
+
+        <div
+          className={`chunk-val ${
+            result?.risk_assessment?.score > 50
+              ? 'risk-high'
+              : 'risk-low'
+          }`}
+        >
+          {result?.risk_assessment?.score ?? 0}
+          {' / 100 '}
+          (
+          {result?.risk_assessment?.score > 50
+            ? 'CRITICAL RISK'
+            : 'NORMAL RISK'}
+          )
+        </div>
+      </div>
+
+      <div className="data-chunk">
+        <div className="chunk-label">
+          Selected Route
+        </div>
+
+        <div
+          className="chunk-val"
+          style={{
+            color: 'var(--accent-cyan)'
+          }}
+        >
+          {result?.route_decision?.route}
+        </div>
+      </div>
+
+      <div className="data-chunk">
+        <div className="chunk-label">
+          Routing Justification
+        </div>
+
+        <div className="chunk-val">
+          {result?.route_decision?.reason}
+        </div>
+      </div>
+
+      <div className="data-chunk">
+        <div className="chunk-label">
+          Decision Score
+        </div>
+
+        <div className="chunk-val">
+          {result?.route_decision?.decision?.decision_score}
+        </div>
+      </div>
+
+      <div className="data-chunk">
+        <div className="chunk-label">
+          Route Path
+        </div>
+
+        <div className="chunk-val">
+          {result?.route_decision?.best_route?.path?.join(
+            ' → '
+          )}
+        </div>
+      </div>
+
+    </div>
+  </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 20px', border: '1px dashed var(--border-subtle)', borderRadius: '12px', marginTop: '20px' }}>
               <Cpu size={48} color="var(--text-muted)" style={{ margin: '0 auto 16px', opacity: 0.5 }} />

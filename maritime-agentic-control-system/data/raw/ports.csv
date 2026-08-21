@@ -1,0 +1,11 @@
+port_id,port_name,country,latitude,longitude,port_type
+SGSIN,Singapore,Singapore,1.2644,103.8223,hub
+MYTPP,Tanjung Pelepas,Malaysia,1.3644,103.5487,container
+LKCMB,Colombo,Sri Lanka,6.9271,79.8612,hub
+AEJEA,Jebel Ali,UAE,25.0113,55.0612,container
+EGPSD,Port Said,Egypt,31.2653,32.3019,canal_gateway
+EGSUE,Suez,Egypt,29.9668,32.5498,canal_gateway
+NLRTM,Rotterdam,Netherlands,51.9244,4.4777,hub
+ZADUR,Durban,South Africa,-29.8587,31.0218,hub
+ZACPT,Cape Town,South Africa,-33.9249,18.4241,hub
+GBFXT,Felixstowe,United Kingdom,51.9553,1.3517,container

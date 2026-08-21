@@ -26,16 +26,29 @@ const MOCK_WORKFLOW_RESULT = {
 /**
  * Triggers the LangGraph multi-agent collaborative workflow
  */
-export const executeWorkflow = async () => {
-  try {
-    const res = await fetch(`${BASE_URL}/run-workflow`);
-    if (!res.ok) throw new Error('Network error');
-    return await res.json();
-  } catch (err) {
-    console.warn('Backend offline for executeWorkflow, simulating multi-agent LangGraph execution.');
-    await new Promise(resolve => setTimeout(resolve, 1200)); // simulate AI processing delay
-    return MOCK_WORKFLOW_RESULT;
+export const executeWorkflow = async (event, route) => {
+  const res = await fetch(
+    `${BASE_URL}/intelligence/analyze`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        event,
+        route,
+      }),
+    }
+  );
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(
+      `Workflow analysis failed: ${errorText}`
+    );
   }
+
+  return await res.json();
 };
 
 /**
