@@ -1,1 +1,28 @@
+# Local deployment state
+.netlify/
 
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Node dependencies
+node_modules/
+
+# Build output
+dist/
+@"
+# Local deployment state
+.netlify/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Node dependencies
+node_modules/
+
+# Build output
+dist/
+"@ | Set-Content .gitignore

@@ -18,8 +18,9 @@ export const fetchRisks = async () => {
   return res.json();
 };
 
-export const runWorkflow = async () => {
-  const res = await fetch(`${BASE_URL}/run-workflow`);
+export const runWorkflow = async (sessionId = null) => {
+  const url = sessionId ? `${BASE_URL}/run-workflow?session_id=${sessionId}` : `${BASE_URL}/run-workflow`;
+  const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to run workflow');
   return res.json();
 };
@@ -33,5 +34,47 @@ export const fetchAgents = async () => {
 export const fetchRecommendations = async () => {
   const res = await fetch(`${BASE_URL}/recommendations`);
   if (!res.ok) throw new Error('Failed to fetch recommendations');
+  return res.json();
+};
+
+export const fetchGovernanceAgents = async () => {
+  const res = await fetch(`${BASE_URL}/governance/agents`);
+  if (!res.ok) throw new Error('Failed to fetch governance agents');
+  return res.json();
+};
+
+export const fetchGovernanceExecutions = async () => {
+  const res = await fetch(`${BASE_URL}/governance/executions`);
+  if (!res.ok) throw new Error('Failed to fetch governance executions');
+  return res.json();
+};
+
+export const fetchGovernanceAudit = async () => {
+  const res = await fetch(`${BASE_URL}/governance/audit`);
+  if (!res.ok) throw new Error('Failed to fetch governance audit');
+  return res.json();
+};
+
+export const fetchGovernanceApprovals = async () => {
+  const res = await fetch(`${BASE_URL}/governance/approvals`);
+  if (!res.ok) throw new Error('Failed to fetch governance approvals');
+  return res.json();
+};
+
+export const approveGovernanceRequest = async (id) => {
+  const res = await fetch(`${BASE_URL}/governance/approvals/${id}/approve`, { method: 'POST' });
+  if (!res.ok) throw new Error('Failed to approve request');
+  return res.json();
+};
+
+export const rejectGovernanceRequest = async (id) => {
+  const res = await fetch(`${BASE_URL}/governance/approvals/${id}/reject`, { method: 'POST' });
+  if (!res.ok) throw new Error('Failed to reject request');
+  return res.json();
+};
+
+export const updateAgentStatus = async (agentId, status) => {
+  const res = await fetch(`${BASE_URL}/governance/agents/${agentId}/status?status=${status}`, { method: 'POST' });
+  if (!res.ok) throw new Error('Failed to update agent status');
   return res.json();
 };

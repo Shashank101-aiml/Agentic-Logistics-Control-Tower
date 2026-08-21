@@ -40,7 +40,7 @@ A FastAPI backend for maritime event logging, route planning, risk management, a
 1. Clone the repository:
 
 ```bash
-git clone <repo-url>
+git clone <https://github.com/Shashank101-aiml/Agentic-Logistics-Control-Tower.git>
 cd maritime-agentic-control-system/backend
 ```
 
@@ -71,8 +71,7 @@ OPENAI_API_KEY=your_openai_api_key
 
 ## Database
 
-The application supports SQLite locally and Postgres in production. Configure `DATABASE_URL` accordingly.
-
+The application supports SQLite locally and Postgres in production. 
 Example SQLite:
 
 ```text

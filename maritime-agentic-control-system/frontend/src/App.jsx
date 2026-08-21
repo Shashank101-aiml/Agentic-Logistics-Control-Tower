@@ -6,6 +6,7 @@ import EventMonitor from './pages/EventMonitor';
 import RiskAnalysis from './pages/RiskAnalysis';
 import RouteRecommendations from './pages/RouteRecommendations';
 import Settings from './pages/Settings';
+import GovernanceDashboard from './pages/GovernanceDashboard';
 import './index.css';
 
 export default function App() {
@@ -25,6 +26,8 @@ export default function App() {
         return <RiskAnalysis />;
       case 'routes':
         return <RouteRecommendations />;
+      case 'governance':
+        return <GovernanceDashboard />;
       case 'settings':
         return <Settings />;
       default:

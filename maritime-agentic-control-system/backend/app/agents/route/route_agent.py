@@ -4,30 +4,37 @@ from typing import Any, Dict, Optional
 class RouteAgent:
     def suggest_route(
         self,
-        risk_score: float,
+        risk_score: Any,
         current_route: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, str]:
+        if isinstance(risk_score, dict):
+            risk_score = risk_score.get("score", 50)
+        try:
+            risk_score = float(risk_score)
+        except (TypeError, ValueError):
+            risk_score = 50.0
+
         if risk_score >= 90:
             return {
-                "route": "Cape of Good Hope",
-                "reason": "Extreme risk detected. Recommend a longer but safer passage to avoid severe conditions."
+                "route": "Cape of Good Hope Bypass",
+                "reason": "Extreme risk detected. Recommend a longer but safer passage to avoid severe condition cell."
             }
 
         if risk_score >= 70:
             return {
-                "route": "Horn of Africa",
-                "reason": "High risk conditions present. Use a more conservative route with established safety margins."
+                "route": "Corridor Beta (Southern Bypass)",
+                "reason": "High risk conditions present. Shifting waypoints 120 nm south to bypass severe weather system."
             }
 
         if risk_score >= 40:
             return {
-                "route": "Suez Canal",
-                "reason": "Moderate risk. Proceed with caution on the standard commercial channel."
+                "route": "Suez Canal Commercial Passage",
+                "reason": "Moderate risk. Proceed with caution along standard commercial channel."
             }
 
         return {
-            "route": "Panama Canal",
-            "reason": "Low risk conditions. Use the fastest and most direct route."
+            "route": "Direct Deepwater Corridor",
+            "reason": "Low risk conditions. Optimal direct high-speed navigation route."
         }
 
     def suggest_route_from_context(

@@ -12,6 +12,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     { id: 'risk', label: 'Risk Analysis', icon: <ShieldAlert size={20} /> },
     { id: 'routes', label: 'Route Planning', icon: <Navigation size={20} /> },
     { id: 'workflow', label: 'AI LangGraph Pipeline', icon: <Cpu size={20} /> },
+    { id: 'governance', label: 'Agent Governance', icon: <ShieldAlert size={20} /> },
     { id: 'settings', label: 'System Settings', icon: <SettingsIcon size={20} /> }
   ];
 
